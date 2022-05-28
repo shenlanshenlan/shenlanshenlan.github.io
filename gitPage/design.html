@@ -1,0 +1,797 @@
+<pre>
+
+#include <string>
+#include <iostream>
+using namespace std;
+/* c++ 设计模式  
+   [设计模式～可复用面向对象软件基础]
+ 
+*/
+
+ 
+                      //创建型模式
+//************************************************************1抽象工厂
+//=================组件==============================
+ class database    //基类  //  数据库组件类  
+{ 
+  int a;  
+};
+class database_mysql:public database  //组建子类 
+{
+   int b;
+}; 
+class database_oracle:public database  //组建子类 
+{
+   int b;
+}; 
+//=================工厂============================
+class factory   //  工厂抽象类  用于创建的 抽象工厂
+{
+  public:
+     virtual  database * create_database()=0;  //返回一个对象 又子类实现
+};
+
+class serviceA_factory : public factory  //工厂子类
+  {
+    virtual database*  create_database(){   return new database_mysql;}   //子类实现了虚函数 决定实例哪个对象
+  };
+class serviceB_factory : public factory  //工厂子类
+  {
+    virtual database*  create_database(){   return new database_oracle;}   //子类实现了虚函数 决定实例哪个对象
+};
+
+/*
+    抽象类 可以配置  多个  组建基类指针
+          A* create()      每个组建基类指针 可 派生多个子类 
+          B* create()
+          C* create()        
+调用：
+factory * obj;
+     obj = new serviceA_factory;
+     database * = obj->create_database()      得到mysql;
+
+     obj = new serviceB_factory;
+     database * = obj->create_database()      得到oracle;
+                
+           不同的工厂实例----------->create()   返回不同的组件
+*/
+
+ //*********************************************************2builder 建造者 
+//=======================组件=========================
+class builder  //建造者
+{ 
+     virtual  int builpart();   //抽象接口接口 
+};
+class concretebuilderA :public builder       
+{
+    virtual  int builpart( /*  构建组件 A,B   */);   //实现1
+    int  getresult();  //返回结果  
+};
+class concretebuilderB  :public builder
+{
+    virtual  int builpart( /*  构建组建  D,C  */);   //实现2
+    int  getresult();  //返回结果  
+};
+//  像建造者流水线一样 构建所需组件
+//==========================建造者=======================
+ class user
+ {   
+     user(builder* point);  
+     builder * P; 
+ };
+
+/* 调用：
+     1构建user 时 配置该内置指针
+     builder * concrete = new concreatebuilderB; 构建组建  D,C 
+     builder * concrete = new concreatebuilderA; 构建组件 A,B
+     user   obj(concrete);   
+     配置user需要的具体构建类
+    
+    （具体的builder 类  创建不同的组件,用户只需要一个具体类的指针）
+ 
+ */
+//*******************************************************************3factory maethod 工厂方法
+
+///============组件========
+class A 
+{
+};
+class B :public A 
+{
+};
+class C :public A
+{
+};
+//============建造者==========
+class user1
+{ 
+   virtual A* create_doc();  
+   int new_document() ;         //接口非虚函数
+};      //   |   
+        //   v
+/* {    A * a = create_doc()   }  调用   虚函数    */
+
+class user1_1 :public user1
+{
+  virtual A* create_doc(){   return new  B ;};   //构建组件B
+} ;
+class user1_2 :public user1
+{
+  virtual A* create_doc(){   return new  C ;};  //构建组件 C
+} ;
+/*调用：
+
+      user1 * obj;
+      obj = new  user1_1;
+     A * obj->create_doc();   //返回组件B
+ 
+
+   (把创建工作 制定一个函数 在该函数中调用虚函数 该虚函数由子类实现 
+    抽象类不知道需要哪个 组件子类 所以丢给虚函数 只提供一个操作接口）
+*/
+
+//*************************************************************4prototype 原型
+//========================被创建
+class prototype
+{
+   virtual prototype * clone(); 
+};
+class concrete1 :public prototype
+{
+   virtual prototype *clone(){/*return myself  */ };    // 虚函数 返回自身
+};
+class concrete2 :public prototype
+{
+   virtual prototype *clone( ){/*return myself  */};      // 虚函数 返回自身
+};
+//=========================建造者
+class client
+{ 
+      prototype *obj;
+  int operation() ;
+};
+
+/* 调用
+    int  operation（）
+    {    
+         prototype * A;
+         A = prototype->clone();  // A 对象 指向了一个 复制过来的全新的实例
+    }
+   （ 原型模式类似 C++ 的拷贝构造  在对象动态运行时获得一份该对象的拷贝 并且互不影响 
+      当 在创建一个对象代价太大 或者 需要一个该对象 并且互不影响时 用原型  动态配置） 
+*/
+//*****************************************************************************5singleton 单例模式
+class singleton
+{
+private:
+   static singleton * _instance;
+public:
+   static singleton * Instance();
+protected:
+   singleton(){};                   //注意点2  构造函数必须设置为私有
+
+};
+ singleton * singleton::_instance;  // 注意点1  静态变量的初始化方式
+ 
+  singleton* singleton::Instance()
+ { 
+     if( _instance ==0 )
+    { 
+        _instance =new singleton;
+        return _instance;
+    }else 
+       return  _instance;
+ }
+/*
+ 调用：
+   singleton::Instance();
+   只实例化一个全局对象  
+ 
+ */
+                            //结构型模式@
+//*****************************************************************************1 adapter 适配器
+/*
+//01 类适配器 多重继承
+class n1
+{public:
+  virtual int request1();
+};
+class n2
+{public:
+  virtual int request2();
+};
+class adapter: public n1,n2 
+{
+  virtual int request1();
+};
+int adapter::request1()
+{
+    request2();       //在接口中调用 n2类的操作接口 适配两个类
+  return 0;
+}
+   //（多重继承 在一个类的请求中调用另一个类的接口）  
+//---------------------------------------------------
+//02 对象适配  对象组合
+class v1
+{
+  virtual  int request()  ;
+
+};
+class adapter1
+{ 
+  n1 n;
+ virtual int request(){ n.request1(); }; //  <<<<------调用对象的 操作
+};
+*/
+/* 
+ （适配器 通过继承目标对象  1继承另外一个类 2 拥有一个对象 
+   来实现 兼容两个没关系的类或对象);
+
+*/
+//==================================================================================2bridge (桥接）
+/*
+class win  //windows
+{  
+ public:
+  virtual  void w_read();          //  该抽象接口实现不同操作
+}; //此类被继承 重写 w_read;
+
+class abstract
+{  
+ public: 
+     win *w;
+     void read(){ w->w_read();} ;   //（@@@@@@@非虚函数）基类调用 内置指针 的抽象接口
+};
+
+class concrete3 :public abstract 
+{
+  void drawrect(){ read();};       //调用基类 操作接口
+};
+*/
+/* 调用：
+    abstract * obj;
+    obj= new concrete3;
+    obj->drawrect();
+    (桥接模式 通过一个类 操控 另外一个类  内置一个被操作类的指针  调用该类的操作接口)
+*/
+//===================================================================================3 composite  组合*/
+/*
+class t
+{
+public:
+ virtual void red();
+ virtual void blue();
+ virtual void green();
+};
+class leaf : public t
+{
+public:
+ virtual void red();
+};
+class tt : public t
+{ 
+  t* t_leaf;         
+  virtual void red(){ t_leaf = new leaf; t_leaf->red();}  //子类包含其基类的指针 并实例化该基类的其他子类 并调用其操作接口
+};     */
+  /*
+    （子类包含其基类的指针 并实例化该基类的其他子类 并调用其操作接口  递归组合（此精髓并未深刻领悟） 
+  */
+//************************************************************************************************************4decorator装饰
+class d    //抽象
+{public:
+  virtual void draw()=0;
+};
+class textview : public d  //装饰
+{ public: 
+  virtual void draw(){ cout<<"装饰 ";   }
+};
+//被装饰
+class decorator : public d    //非抽象类  但是其作为基类 不该有实例         
+{ public:
+    d * textview1;
+ virtual void draw(){textview1 = new textview ; textview1->draw()  ; cout<<"基类虚函数"<<endl;}    ;      // 
+};
+class decorator1 :public decorator
+{
+ virtual void draw(){  decorator::draw(); draw222(); } //调用基类的 draw() 基类的 draw() 将调用 装饰类的 draw()
+         void draw222() {  cout<< "被装饰"<<endl ; }
+};   
+  
+/*
+   d * client = new decorator1;
+       client->draw();
+
+( 被装饰的类 继承一个抽象类  该抽象类的另一个子类提供装饰 被装饰的类含有装饰类的指针 调用装饰类的操作 再调用自己操作）
+*/
+
+//************************************************************************************************************5facade外观
+
+//（为功能复杂的 系统提供统一接口）
+
+//************************************************************************************************************6flyweight 享元
+/*
+#define extrinsicstate
+#define 具体实例类型 int
+//=========================对象======================================================
+class flyweight  //抽象类
+{
+virtual void operation(extrinsicstate);   //一些操作 行为
+};
+class itema :public flyweight             //内部 可共享子类
+{ 
+    int inirinsicstate ; //内部 
+};
+
+class unshared2 :public flyweight         //外部 不可共享子类
+{ 
+    int allstate ;       //外部 
+};
+ //============================================================= 
+class flyweightfactory  //工厂
+{
+  public:
+  void  getflyweight(具体实例类型);   //返回一个共享对象 如果在池中则返回 如果不在就创建返回 
+       flyweight objs[100] ;  //共享对象池      
+};
+*/
+/* flyweightfactory* client = new flyweightfactory;
+    client -> getflyweight();
+
+（享元模式 处理大量相同或相似对象时 使用 在工厂中保存一个容器 
+   当客户请求时  if 是可共享的对象 -> 查看容器中是否存在
+                    如果存在则返回对象 如果不存在创建 加入容器 返回对象
+               else
+                 对不可共享的对象  直接创建返回？？？（有争议）
+                 思路大致如此
+
+*/
+//***********************************************************************************************************7 proxy  代理
+
+class subject     //  抽象接口
+{public:
+  virtual int draw()=0;  //操作请求
+};
+
+class realsubject :public subject  //真正的主题   被代理子类
+{
+virtual int draw(  ) {    cout<<"real"<<endl;            return  22 ;};   //真正的 操作
+};
+class proxy:public subject              //代理子类
+{
+  public:
+   subject *real;
+  virtual int draw(){ real=new realsubject; real->draw();  cout<<"proxy"<<endl;  return 1;   }; //代理请求真正的主题执行操作 
+};
+
+/*   subject  * client = new proxy; 
+     client->draw();
+  （思路：代理 和被代理对象 公用同一个抽象接口 ，在客户获得一个代理对象  当客户请求时 代理向真正的被代理对象 发出请求）
+*/
+
+//=============================行为模式==========================================================
+//****************************************************************************************************1 chain of responsibility 职责链/ 
+ //调用链  如果基类能处理则处理 不能处理 传递给子类 直到处理
+
+class handler
+{
+public:
+  handler(handler * succ):successor(succ){ cout<<"1"; };
+  virtual void handlerequest(){ successor->handlerequest();cout<<"a";} ;
+private:
+  handler * successor ;    //继承者
+};
+class h1 : public  handler                                //第一层
+{
+  public:
+   h1(handler * succ):handler(succ),successor(NULL){cout<<"2";};
+  virtual void handlerequest(){  cout<<"b";         }  ;
+  private:
+   handler * successor ;    //继承者
+};
+class h1_1 : public h1                                     //第二层
+{
+ public:
+  h1_1(handler*succ):h1(succ),successor(new h1(this)) {      cout<<"3";} 
+  virtual void handlerequest(){ cout<<"c";  successor->handlerequest();     } ;
+  private:
+  handler * successor ;    //继承者  --->指向h1
+};
+       
+   /*(  调用：  h1_1 * client = new h1_1(client);   
+       client->handlerequest();    //输出12123cb
+      **此模式 适用于  大型系统  子类对象与基类对象 属于组合关系  
+        每一个子类对象包含一个私有的 继承者指针（用于处理某请求） 虚函数如果可以处理 则处理之  
+        如果不能处理则 调用私有 指针的处理方法  是一个调用链  树型的组织结构（需要时间 实践）
+     */
+
+ 
+//****************************************************************************************************2 command命令/ 
+//将一个请求封装为对象
+class receiver    // 执行具体命令的类
+{
+  public:
+void action(){  cout<<"->>>>>receiver执行任务"<<endl;}  ;
+};
+//------------------------------------
+class command      //命令对象
+{
+public:
+      command(receiver * n):obj(n){};
+    virtual void execute()=0;
+protected:
+     receiver * obj;       //@@含有执行着指针重点
+};
+//-----------------v
+class concretecommand : public command
+{
+ public:
+         concretecommand(receiver* b):command(b){};
+virtual void execute(){ cout<<" concretecommand（调用虚函数）具体命令执行"<<endl; obj->action();}; 
+};
+//---------------------------------------
+
+class invoker     // 命令持有 调用
+{
+  public:
+  command * cmds[100];
+  void enter( command * acmd){ cmds[0] = acmd;}; 
+  void run(){ (cmds[0])->execute();}
+};
+//----------------------------------- 
+//client       装配命令  gof[创建一个命令并设定他的接受者（执行者）]
+  /*调用：
+    invoker    user;
+    receiver   rece;                    //执行命令的对象
+    command *  conc = new concretecommand(&rece);  //装配命令对象//
+    user.enter(conc); 
+    user.run();         
+    -------------------
+ 结果   concretecommand（调用虚函数）具体命令执行
+       ->>>>>receiver执行任务
+       命令是抽象类 可生成不同的命令对象重点
+      把一个命令具体化为对象  
+      这个对象包含处理该命令的对象指针   另外一个具体对象 
+      一个调用着（invoker) 拥有这些对象
+      client(装配着构建命令并配置他的执行者）
+      客户调用 invoker 对功能调用
+
+    思路   分离 调用着 和 具体执行的类
+
+ */
+
+ //****************************************************************************************************3 解释器命令/ 
+//意图 给定一个语言 定义它的文法的一种表示 定义一个解释起 解释起使用该表示解释语言中的句子
+/*
+#define  context string
+class abs_exp                    //抽象基类
+{
+  virtual void interpret(context);
+};
+class ter_exp :public abs_exp     //终结符子类
+{
+  virtual void interpret(context){  }
+ 
+};
+class nonter_exp:public abs_exp     //非终结符子类
+{
+   virtual void interpret(context){   }
+
+};
+*/
+//(太复杂  暂时搁置  以后有时间再搞）
+
+
+ //****************************************************************************************************4 迭代器
+ //提供一种方法顺序访问一个聚合对象中各个元素 而又不需要暴露该对象的内部表示
+
+  /*  访问一个聚合对象的内容而无需暴露它的内部表示。
+      支持对聚合对象的多种遍历。
+      为遍历不同的聚合结构提供一个统一的接口(即, 支持多态迭代)
+     @@@@@ 参考 stl 容器
+
+  。*/
+
+ //****************************************************************************************************5  中介者
+ //用一个终结对象来封装一系列的对象交互 中介这使各对象不需要 显示的相互引用 从而使其耦合松散 而且可以独立的改变他们之间的交互
+  
+class colleague;
+ class mediator //中介基类 
+{ 
+public:       
+    virtual   void action()=0;
+      void  setcA(colleague *a){ A = a;}    
+protected:
+     colleague  *A;                                   //响应类
+     //也可以是其他 类型指针对象
+     //例如  database * point;                //然后在具体子类中配置 action 行为   
+ };
+ //============================================       具体子类  为执行某个操作
+ class medA :public mediator 
+ { public:
+     virtual  void action ();       //具体行为
+ }; 
+  
+class colleague  // 同事类
+{
+ public:  
+            colleague(mediator *m):med(m){};
+   virtual  void draw()=0;      //           一个接口  向中介请求     
+ 
+protected:
+    mediator * med;          //中介对象指针 
+};
+class colA : public colleague  // 同事类
+{
+   public:  
+             colA(mediator* m):colleague(m){}
+   virtual  void draw(){  cout <<"a drow()";  med->action();} ;      //具体行为    
+};
+class colB: public colleague  // 同事类
+{  
+ public:        
+            colB(mediator *m):colleague(m){}
+   virtual  void draw(){  cout <<"b drow()";  } ;      //具体行为 
+           
+               
+};
+ void medA::action(){ A->draw(); }
+ //============================================================================================
+  /* 调用： 
+        mediator *  M =  new medA();       
+        colleague * B = new  colB(M);
+        colleague * A = new  colA(M); 
+        M->setcA(A); M->setcB(B); 
+        A->draw();
+  
+       中介基类                       同事基类
+       含有同事组件的指针              含有中介指针
+       一个同事子类   请求 一个中介子类  调用   另一个同事子类  完成一个操作 
+       （好处是 同时子类 实现基类的调用接口 该接口调用中介接口，但同时要配置中介的子类虚函数怎么处理该请求 
+         细节繁琐可能越来越复杂
+         一个中介子类  配置 一个处理行为的 同事或者 其他类的对象 
+        感觉没什么卵用啊   同事类  要配置 中介对象（多个？？） 然后 在虚函数中确定调用哪个？？）
+        一个同事基类中要配置 多个中者者？？？？
+*/
+ //****************************************************************************************************6 备忘录
+ //在不破坏封装的情况下 捕获一个对象的内部状态 并保存 以后可以回复
+class state;
+class memento;
+class originator           //原发类
+{
+  public:
+     memento * creatememento();
+     void setmemento(const memento*);    //  更新状态？
+ private:
+    state * _state;       //其他内部数据结构
+} ;
+ 
+ class memento{          //备忘录类
+  public:
+      //没有公共接口
+  private:
+  friend class originator;
+  memento();
+ void setstate(state*);
+ state * getstate();
+
+private:
+  state* _state;       //其他内部数据结构
+ };
+
+/* （备忘录只能被其友元类创建并访问 没有外部接口） */
+
+
+
+ //****************************************************************************************************7 observer观察者
+//定义对象间一对多的依赖管事  当对象状态发生改变是 依赖它的对象得到通知
+ class observer;
+ class sub  //被观察者
+{ 
+public:
+   virtual void attach(observer *)=0;  
+   virtual void detach(observer *)=0;
+   virtual void notify()=0;                 // 通知观察者
+   virtual sub* getstate()=0;
+protected:
+      observer * obs[100];
+};
+ 
+class observer 
+{
+    public:
+
+  virtual void update()=0;
+ 
+};
+class conOB: public observer
+{
+   public:
+     virtual void update(){ S->getstate();  cout<<"被观察对象状态改变，执行某操作"<<endl;} 
+     sub *  S;                 //具体要观察的对象
+};
+
+class conSUB : public sub
+{
+ public:
+   virtual void attach(observer * a){ obs[0] = a;} ;  
+   virtual void detach(observer *){};
+   virtual void notify(){ obs[0]->update(); }     ;            // 
+   virtual sub* getstate(){return this;};
+};
+ /*调用
+       sub * OBJ = new conSUB;
+       conOB * obs = new conOB;
+       obs->S = OBJ;
+       OBJ->attach(obs);  
+       OBJ->notify();
+ （被观察者 添加 观者的指针   当被观测对象状态改变时  调用观察者的 更信 接口操作  
+  1具体的观察者子类决定怎么 处理  
+  2具体的被观察者子类决定 哪些观测对象
+*/
+ //**************************************************************************************************** 8 state 状态   牛B
+//允许一个对象在其内部状态改变是改变他的行为 就像修改了 他的类
+class tcp;
+class state
+{
+public:
+  virtual void open(tcp *p){ cout<<"默认操作" << endl;changestate(p); };//<------改变状态
+  virtual void send(tcp *p){                                       };
+protected:  
+    void changestate(tcp*) ;
+};
+class state_open : public state //open state
+{
+public:
+  virtual void open(tcp *p){ cout<<"状态1操作"<<endl;}
+  virtual void send(tcp *p){                 }  
+};
+class tcp 
+{
+  public:
+           tcp():_state(new state){}                    //默认状态
+     void open(){  _state->open(this) ; } 
+     void send(){  _state->send(this) ; }                  
+  private: 
+    friend class state;
+    void   changestate(state* q) ;  
+    state *_state;
+};
+ void state::changestate(tcp* p ){ delete p->_state;    p->_state = new state_open;    };   
+
+ /* 重点 不会段错误   不会啊    逆天啊
+        调用    tcp    obj; 
+                   obj.open();      输出 默认操作
+                   obj.open();      输出 状态1操作
+                   （两次调用输出不一样啊 牛逼）
+          （不多说了 自己体会）       
+*/
+
+ //**************************************************************************************************** 9 strategy  策略   
+//定义一系列的算法 把他们一个一个封装起来并且是他们可相互替换 算法独立于客户
+//             （跟上面那个 颇相似）
+class tcp;
+class strategy
+{
+public:
+  virtual  void  action(){ cout<<"算法1" << endl;}; 
+};
+class strategy1: public strategy //open state
+{
+public:
+   virtual  void action(){ cout<<"算法2" << endl;};         
+};
+class client1
+{
+  public:
+           client1( strategy *p):_strategy(p){}             
+     void run(){  _strategy->action() ; }                  
+  private: 
+    
+      strategy *_strategy;
+};
+ //===================跟上面技术层面差不多=====================================================
+  //**************************************************************************************************** 10 template medhod 模板方法
+  //定义一个 操作中的 算法骨架 将一些步骤延迟到子类
+  //        子类可重定义某些步骤
+ 
+class doc 
+{
+  public:
+   virtual  void  read()=0;
+   int  file; 
+};
+class doc1 :public doc
+{
+   public: 
+   virtual  void  read(){   cout <<"reading from file";}
+};
+class doc2 :public doc
+{
+   public: 
+   virtual  void  read(){   cout <<"reading from  img";}
+};
+//=================================================================
+class app
+{
+  public:
+  virtual  doc * openDoc()=0;
+};
+class app1 :public app
+{
+  public:
+   virtual  doc * openDoc(){ doc *  a = new doc2; a->read(); return a ; };
+};
+ 
+/*
+调用:
+    app * a= new app1;
+          a->openDoc();   输出 reading from img
+ 将一个操作或者一个算法 分解  由主类 做骨架 或者完成特定需求的步骤
+                          由子类 做具体的细节操作（可重定义）
+    （分解大型操作的 必要方法吧）
+*/
+  //**************************************************************************************************** 11 visitor 访问着
+  //表示一个作用于某对象结构中的各元素操作 它使你可以在不改变各元素的类的前提下定义作用于这些元素的新操作
+  //将操作封装 成一个类
+class element;
+class visitor
+{ public:
+  virtual void  visitnodeA(element *a)=0;  
+  virtual void  visitnodeB(element *a)=0; 
+};
+  class v1 :public visitor
+{
+  public: 
+  virtual void  visitnodeA(element *a){  cout<< "该函数获取到具体元素的指针,可定义新对这些元素的操作" ;}; // 访问者 得到了具体元素的指针 
+  virtual void  visitnodeB(element *a){                        };  
+};
+ class v2  :public visitor
+{
+public:
+    virtual void  visitnodeA(element *a){}; 
+    virtual void  visitnodeB(element *a){}; 
+};
+
+class element
+{
+public:
+   virtual  void accept(visitor *vv)=0;
+};
+class e1 : public element
+{
+public:
+   virtual  void accept(visitor * vv){  vv->visitnodeA(this); }  ;//实现接口调用不同的访问者  回调代入自身
+};
+class e2 : public element
+{
+public:
+   virtual  void accept(visitor &vv)=0;
+};
+/*
+#调用
+       visitor *s = new v1;
+       element *e = new e1;
+       e->accept(s);
+   
+    （重点思路  将对一类（被访问者）的  （对象操作） 独立封装为单独的 访问者对象）
+     该类对象提供接口调用同样的接口 执行（访问者的访问操作）<------  vv - >visitnodeA(this);
+     访问着在该函数中（执行对该对象的各种操作）
+     被访问者可以使用不同的 访问者    访问者也可定义 不同的操作 且都是虚函数 自由空间极大
+     但这两个类依赖比较强 适用于提前需要定制好完善方案的框架
+
+  */
+
+ //**************************************23种设计模式******************************/
+ //只是以自己的理解 以简略代码的方式表述出来  
+ //算是看过一遍  要融会贯通  需要时日
+ 
+int main()
+{
+ 
+ return 0;
+}
+
+//2018-02-07 
+
+
+</pre>
