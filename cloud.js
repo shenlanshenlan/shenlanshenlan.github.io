@@ -34,7 +34,7 @@ function load_Cloud(){
     var size;
     var oReq = new XMLHttpRequest();
     oReq.open("GET", "/cloud.txt", true);
-    oReq.responseType = "txt";
+    oReq.responseType =   "text";
     oReq.onload = function (oEvent) {
       var txt =  oReq.response;
       var arr =txt.split("\r\n");
