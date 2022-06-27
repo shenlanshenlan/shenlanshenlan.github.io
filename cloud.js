@@ -37,7 +37,7 @@ function load_Cloud(){
     oReq.responseType =   "text";
     oReq.onload = function (oEvent) {
       var txt =  oReq.response;
-      var arr =txt.split("\r\n");
+      var arr =txt.split("\n");
       size=arr.length;
       for(i=0;i<size;i++){
         row=arr[i];
