@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>K Web Site</title>
+    <link rel="stylesheet" type="text/css" href="./index.css">
+  </head>
+  <body>
+    <div id="project">
+
+
+      <div class="item">
+        <h4 class="title" >
+          Autodesk inventor To TeamCenter
+        </h4>
+        <div class="text" >
+          <pre>
+        简介: 
+        国内某重工行业设计方面使Autodesk inventor,设计管理使用,西门子Team Center, 
+        由于两个软件没有对应接口所以对Inventor进行了二次开发,
+        实现以下几个任务:
+        1)对接TC进行用户验证
+        2)整理模型树构建相应数据结构
+        3)多格式模型转换(obj,stp,igs,jt,pdf)
+        4)模型属性资源整理(物料号,日期等系统或自定义属性)
+        5)统计表输出,根据各零件类型(外购,标准等特性)对模型树进行信息统计,包括数量重量累计,单独节点累计等
+        6)虚拟零件插入,通过对接企业物料管理系统,快速查找已有物料信息并写入设计零件属性
+        7)批量重设零件图号
+          </pre>
+        <div class="note">
+           C# Winfrom; inventorAddin ; OracelClient; Excel组件; WebService;
+        </div>
+          </div>
+          <div class="image">
+            <img src="./Jpg/image001.png" alt="">
+          </div>
+        </div>
+        <hr>
+
+      <div class="item">
+        <h4 class="title" >
+          Autodesk inventor 复制设计
+        </h4>
+        <div class="text" >
+        <pre>
+        简介: 
+        三维设计软件通过子零件和子部件层层组装得到最终总装,
+        再对已有设计进行修改或通过现有设计模型进行新设计时替换模型和设置属性时比较繁琐,
+        该软件实现快速对已有设计进行复制,完成以下几个任务:
+        1)	批量选择是否生成新零件,如否则继续引用旧零件
+        2)	批量修改外部文件名称
+        3)	搜索零件属性定义并快速替换修改
+          </pre>
+        <div class="note">
+           C# Winfrom; inventor sdk;
+        </div>
+          </div>
+          <div class="image">
+            <img src="./Jpg/image003.png" alt="">
+          </div>
+        </div>
+        <hr>
+
+      
+      <div class="item">
+        <h4 class="title" >
+          Autodesk inventor 智能装配系统
+        </h4>
+        <div class="text" >
+        <pre>
+        简介:  
+        针对制造业不同设计产品,该软件实现一套自动参数化设计框架,
+        其主要架构是通过数据库记录各零件装配关系,参数引用关系,标准参数,设计规范等信息,
+        在设计产品时自动查找可用零件及其规格并实现装配特征创建和自动装配.
+        软件借鉴BS设计架构,提供设计界面用来快速设计,也提供管理端用来扩充资源库以及数据信息
+        主要功能:
+        1)	资源库零件分类查找
+        2)	设置参数,添加零件
+        3)	扩充资源库
+        4)	零件参数引用配置
+        5)	零件父子关系配置
+        6)	验证许可(获取机器码进行加密算法验证)
+        </pre>
+        <div class="note">
+        C# Winfrom; inventor sdk;
+        </div>
+          </div>
+          <div class="image">
+            <img src="./Jpg/image005.png" alt="">
+            <img src="./Jpg/image007.png" alt="">
+          </div>
+        </div>
+      <hr>
+
+
+      
+      <div class="item">
+        <h4 class="title" >
+          Web 3D Threejs
+        </h4>
+        <div class="text" >
+        <pre>
+          简介: 
+          基于Threejs引擎在web端实现简单的场景编辑功能
+          模型导入导出
+          服务器保存
+          场景灯光,材质,贴图等编辑功能
+          动画编辑交互  
+          可通过3dmax编辑场景后导入
+          </pre>
+        <div class="note">
+          Javascript ;threejs; php;mysql;nginx;3d max 
+        </div>
+          </div>
+          <div class="image">
+            <img src="./Jpg/image009.png" alt="">
+            <img src="./Jpg/2.png" alt="">
+          </div>
+        </div>
+      <hr>
+     
+
+          
+      <div class="item">
+        <h4 class="title" >
+          Dxf 线段统计
+        </h4>
+        <div class="text" >
+        <pre>
+          简介:
+          激光切割工时计算,批量统计dxf文件中图形长度并统计, 
+          其中难点是由第三生成的dxf图纸中存在多个线段圆弧重合叠加在一起的情况
+          (如两条线段组成更长的一根线段,且首位不连接),主要实现任务:
+          搜索图元分类建立结构
+          去重,线段,弧线,共线检验,相交检验,
+          封闭性检验
+          批量统计写入excel文件
+          </pre>
+          <div class="note">
+          cpp libdxfrw
+          </div>
+
+          </div>
+          <div class="image">
+            <img src="./Jpg/122.png" alt="">
+          </div>
+        </div>
+      <hr>
+
+
+      <div class="item">
+        <h4 class="title" >
+          GL 模型查看
+        </h4>
+        <div class="text" >
+        <pre>
+          简介:
+          OpenGL 搭建三维场景 实现:
+          通用网格,纹理加载(obj,stl)
+          部分dwg实体加载,直线,弧
+          环绕相机 
+          灯光
+          </pre>
+          <div class='note'>
+           cpp;OpengGL;GLSL;mfc;assimp;libdxfrw;glad
+          </div>
+          </div>
+          <div class="image">
+            <img src="./Jpg/32.png" alt="">
+            <img src="./Jpg/33.png" alt="">
+          </div>
+        </div>
+      <hr>
+
+
+      <div class="item">
+        <h4 class="title" >
+          电力智能设计系统
+        </h4>
+        <div class="text" >
+        <pre>
+          简介:
+          通过对电力设计系统中固定图纸进行整理,实现使用参数快速生成图纸集
+          pdf文件合并
+          多图签排列 pdf转出
+          </pre>
+          <div class='note'>
+            中望cad SDK C# 
+          </div>
+          </div>
+          <div class="image">
+            <img src="./Jpg/41.png" alt="">
+            <img src="./Jpg/42.png" alt="">
+            <img src="./Jpg/43.png" alt="">
+          </div>
+        </div>
+      <hr>
+
+
+
+
+
+
+    </div>
+  </body>
+</html>
