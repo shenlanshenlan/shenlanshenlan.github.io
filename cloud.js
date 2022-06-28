@@ -1,7 +1,6 @@
 var renderer;
 var scene;
 var camera;
-
 $(window).on("load",function(){
     scene = new THREE.Scene();
     var width = window.innerWidth; //窗口宽度
@@ -26,29 +25,25 @@ $(window).on("load",function(){
 
    render();
 })
-
 function render(){
     renderer.render(scene, camera);
 }
 function load_Cloud(){
-    var size;
     var oReq = new XMLHttpRequest();
     oReq.open("GET", "/cloud.txt", true);
     oReq.responseType =   "text";
     oReq.onload = function (oEvent) {
       var txt =  oReq.response;
       var arr =txt.split("\n");
-      size=arr.length;
-      $("#size").html(size);
-      for(i=0;i<size;i++){
+      $("#size").html(arr.length);
+      for(i=0;i<arr.length;i++){
         row=arr[i];
+       row=row.replaceAll("\r","");
        row=row.replaceAll("[","");
        row=row.replaceAll("]","");
        rowarr = row.split(";");
        addPoint(rowarr[0],rowarr[1]);
-       console.log(rowarr);
-       size-=1;
-       console.log("size:"+size);
+      //update(i,arr.length);
       }
       var pointMaterial = new THREE.PointsMaterial({
         color: 0xFFFFFF,    //设置颜色，默认 0xFFFFFF
@@ -60,12 +55,24 @@ function load_Cloud(){
       pts.rotateX(Math.PI);
       scene.add(pts);
       render();
+       $("#pcs").hide(1000);
     }
     oReq.send();
+}
+function update(i,length){
+       diff=(i/length).toFixed(2)*100+"%";
+       console.log(diff)
+       document.getElementById("process").innerHTML=diff;
+       $("#process").css({"width":diff});
+       $("#size").html(i);
+       setTimeout(100);
 }
 
 var geometry = new THREE.Geometry();
 function addPoint(point,color){
+  if(color==undefined||point==undefined){
+    return;
+  }
    var parr =point.split(",")
    var carr=color.split(",")
    var a = new THREE.Vector3(parr[0],parr[1],parr[2]-5);
