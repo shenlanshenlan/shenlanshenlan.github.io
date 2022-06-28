@@ -8,7 +8,7 @@ $(window).on("load",function(){
     var height = window.innerHeight; //窗口高度
    //创建相机对象
    camera = new THREE.PerspectiveCamera(45,width/height, 0.1, 1000);
-   camera.position.set(0, 0, 7); //设置相机位置
+   camera.position.set(0, 0, 5.5); //设置相机位置
    camera.near=0.0001;
    camera.far=10000;
    scene.add(camera);
@@ -39,6 +39,7 @@ function load_Cloud(){
       var txt =  oReq.response;
       var arr =txt.split("\n");
       size=arr.length;
+      $("#size").html(size);
       for(i=0;i<size;i++){
         row=arr[i];
        row=row.replaceAll("[","");
@@ -68,7 +69,7 @@ function addPoint(point,color){
    var parr =point.split(",")
    var carr=color.split(",")
    var a = new THREE.Vector3(parr[0],parr[1],parr[2]-5);
-   var clr = new THREE.Color("rgb("+carr[0]+","+carr[1]+","+carr[2]+")");
+   var clr = new THREE.Color("rgb("+carr[2]+","+carr[1]+","+carr[0]+")");
    geometry.vertices.push(a);
    geometry.colors.push(clr);
 }
@@ -85,11 +86,11 @@ function cube(){
 var ctr
 function InitControls(){
    ctr = new THREE.OrbitControls(camera,renderer.domElement);//创建控件对象
-   ctr.zoomSpeed=0.3;
+   ctr.zoomSpeed=0.1;
    //平移速度
-   ctr.panSpeed=0.03;
+   ctr.panSpeed=0.1;
    //旋转速度
-   ctr.rotationSpeed =0.02;
+   ctr.rotationSpeed =0.01;
     //事件 
    ctr.addEventListener('change',function(){
     render();
