@@ -48,14 +48,14 @@ function load_Cloud(){
       var pointMaterial = new THREE.PointsMaterial({
         color: 0xFFFFFF,    //设置颜色，默认 0xFFFFFF
         vertexColors: true, //定义材料是否使用顶点颜色，默认false ---如果该选项设置为true，则color属性失效
-        size: 0.005             //定义粒子的大小。默认为1.0
+        size: 0.015             //定义粒子的大小。默认为1.0
       });
       pts =new THREE.Points(geometry,pointMaterial);
       pts.scale.set(2,2,2);
       pts.rotateX(Math.PI);
       scene.add(pts);
       render();
-       $("#pcs").hide(1000);
+      $("#pcs").hide(1000);
     }
     oReq.send();
 }
