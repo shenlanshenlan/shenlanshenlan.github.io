@@ -3,51 +3,196 @@
   <head>
     <meta charset="utf-8" />
     <title>K Web Site</title>
-    <link rel="stylesheet" type="text/css" href="./index.css">
-    <script type="text/Javascript" src="./three.min.js"></script>
-    <script type="text/Javascript" src="./OrbitControls.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/public.css">
+    <script type="text/Javascript" src="./index.js"></script>
     <script type="text/Javascript" src="./jquery-1.10.2.min.js"></script>
-    <script type="text/Javascript" src="./cloud.js"></script>
 </head>
 <body>
-  <div id="pcs" style="position:fixed;text-align:center;top:300px; width:100%;">
-    <div style="border-radius:3px;; background-color:rgb(221, 221, 221);
-    padding-top:30px;
-    padding-left:30px;
-    padding-right:30px;
-     height:70px;opacity:0.8;width: 600px;margin:auto">
-      <div>
-      数据加载中... ...
-      </div>
-    <div id="process" style="float:left; border-radius:6px;background-color:rgb(18, 123, 209);
-    padding-top:10px; height:5px;opacity:0.8;width:100%;
-    margin-top: 5px;
-    ">
-    </div>
+  <div id="top">
+    <div style="float:right;font-size:12px;margin:10px">
+      <span> jack </span><br/>
+      <span> shenlanshenlan@sina.com </span><br/>
+      <span> tel:15538238720 </span><br/>
     </div>
   </div>
-  <div style="position:fixed;top:10px;left:10px;  width:200px">
-    <div>
-     <span>size:</span> 
-     <span style="color: rgb(83, 83, 83)" id="size"></span>
+  <div id="left">
+    <div class="title">
+         <span> video</span>
+        <a href="./videoHtml/pcl-icp.html"a>点云 icp 配准</a>
+        <a href="./videoHtml/threejs.html"a>Threejs</a>
     </div>
-  <hr/>
-  <img src="/1.jpg">
-  </img>
-  <pre style="color:gray">
-    1 通过特征点匹配估计相机姿态
-    2 在得到的姿态后使用极限匹配估计深度
-    3 根据深度建立点云
-  </pre>
-  <img style="" src="/2.jpg">
-  </img>
-  <pre style="color:gray">
-    由于单目的天生缺陷,
-    极限搜索在对无纹理的区域进行匹配时基本不准
-    所以过滤掉了很多
-    或许可以改进算法提高匹配率
-  </pre>
+    <hr/>
+    <div class="title"> 一些实现
+        <a href="./slam/index.html"a>单目重建</a>
+        <a href="./cadview/index.html"a>webGL 的 CAD view</a>
+    </div> <br/>
+  </div>
 
-  </div>
+  <div id="mid">
+  <!-- img  -->
+    <div class="item">
+      <img src="./jpg/image009.png">
+      <div class="disc">
+        <span>
+          Threejs 的场景编辑器
+        </span>
+      </div>
+    </div>
+  <!-- img  -->
+    <div class="item">
+      <img width="400px" src="./jpg/2.png">
+      <div class="disc">
+        <span>
+          Threejs 的场景编辑器
+        </span>
+      </div>
+    </div>
+
+    <div class="item">
+      <img width="400px" src="./jpg/相机模型.png">
+      <div class="disc">
+        <span>
+         SLAM 相机模型
+        </span>
+      </div>
+    </div>
+
+    <div class="item">
+      <img width="400px" src="./jpg/重投影误差.png">
+      <div class="disc">
+        <span>
+          SLAM 重投影误差
+        </span>
+      </div>
+    </div>
+
+    <div class="item">
+      <img width="400px" src="./jpg/vim.gif">
+      <div class="disc">
+        <span>
+          vim
+        </span>
+      </div>
+    </div>
+
+    <div class="item">
+      <img width="400px" src="./jpg/filter.png">
+      <div class="disc">
+        <span>
+          PCL-过滤
+        </span>
+      </div>
+    </div>
+
+  
+    <div class="item">
+      <img width="400px" src="./jpg/直接法.png">
+      <div class="disc">
+        <span>
+          OpenCV 光流
+          直接法的姿态估计
+        </span>
+      </div>
+    </div>
+
+    <div class="item">
+      <img width="400px" src="./jpg/灯光.png">
+      <div class="disc">
+        <span>
+          OpenGL 灯光
+        </span>
+      </div>
+    </div>
+
+    <div class="item">
+      <img width="400px" src="./jpg/cadview.png">
+      <div class="disc">
+        <span>
+          WebGL
+          web cad view
+        </span>
+      </div>
+    </div>
+
+    <div class="item">
+      <img width="400px" src="./jpg/环绕相机.png">
+      <div class="disc">
+        <span>
+          OpenGL
+          环绕相机
+        </span>
+      </div>
+    </div>
+
+    <div class="item">
+      <img width="400px" src="./jpg/PCL-feature.png">
+      <div class="disc">
+        <span>
+          PCL-feature
+        </span>
+      </div>
+    </div>
+
+    <div class="item">
+      <img width="400px" src="./jpg/优化.png">
+      <div class="disc">
+        <span>
+         SLAM g2o 
+        </span>
+      </div>
+    </div>
+
+    <div class="item">
+      <img width="400px" src="./jpg/segmentation.png">
+      <div class="disc">
+        <span>
+          PCL-切割
+        </span>
+      </div>
+    </div>
+
+    <div class="item">
+      <img width="400px" src="./jpg/pcl-filter.png">
+      <div class="disc">
+        <span>
+        PCL 点云统计过滤 
+        </span>
+      </div>
+    </div>
+
+    <div class="item">
+      <img width="400px" src="./jpg/坐标系的变换.png">
+      <div class="disc">
+        <span>
+        SLAM  相机和空间坐标系
+        </span>
+      </div>
+    </div>
+
+    <div class="item">
+      <img width="400px" src="./jpg/三角化的推到.png">
+      <div class="disc">
+        <span>
+         SLAM 三角化
+        </span>
+      </div>
+    </div>
+
+    <div class="item">
+      <img width="400px" src="./jpg/拓扑空间构造.png">
+      <div class="disc">
+        <span>
+          mathematics 拓扑空间构造 
+        </span>
+      </div>
+    </div>
+
+  </div><!--mid end-->
+
+    <div id="bigIMG">
+      <img  >
+      </img>
+    </div>
+
 </body>
 </html>

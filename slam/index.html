@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>K Web Site</title>
+    <link rel="stylesheet" type="text/css" href="./index.css">
+    <script type="text/Javascript" src="./three.min.js"></script>
+    <script type="text/Javascript" src="./OrbitControls.js"></script>
+    <script type="text/Javascript" src="./jquery-1.10.2.min.js"></script>
+    <script type="text/Javascript" src="./cloud.js"></script>
+</head>
+<style>
+  img{
+    width: 350px;
+  }
+</style>
+<body>
+  <div id="pcs" style="position:fixed;text-align:center;top:300px; width:100%;">
+    <div style="border-radius:3px;; background-color:rgb(221, 221, 221);
+    padding-top:30px;
+    padding-left:30px;
+    padding-right:30px;
+     height:70px;opacity:0.8;width: 600px;margin:auto">
+      <div>
+      数据加载中... ...
+      </div>
+    <div id="process" style="float:left; border-radius:6px;background-color:rgb(18, 123, 209);
+    padding-top:10px; height:5px;opacity:0.8;width:100%;
+    margin-top: 5px;
+    ">
+    </div>
+    </div>
+  </div>
+  <div style="position:fixed;top:10px;left:10px;  width:400px">
+    <div>
+     <span>size:</span> 
+     <span style="color: rgb(83, 83, 83)" id="size"></span>
+    </div>
+  <hr/>
+  <img src="./1.jpg">
+  </img>
+  <pre style="color:gray">
+    1 通过特征点匹配估计相机姿态
+    2 在得到的姿态后使用极限匹配估计深度
+    3 根据深度建立点云
+  </pre>
+  <img style="" src="./2.jpg">
+  </img>
+  <pre style="color:gray">
+    由于单目的天生缺陷,
+    极限搜索在对无纹理的区域进行匹配时基本不准
+    所以过滤掉了很多
+    或许可以改进算法提高匹配率
+  </pre>
+  </div>
+</body>
+</html>
