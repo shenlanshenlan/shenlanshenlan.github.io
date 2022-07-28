@@ -2,6 +2,7 @@ function Onclick(e){
     var dom =e.srcElement;
     if(dom.localName=="img"&&dom.id==""){
         var src=dom.src;
+        src=src.split("-")[0]+".png";
         $("#bigIMG").show(100);
         $("#bigIMG>img").attr("src",src);
     }else{
