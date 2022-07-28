@@ -12,6 +12,6 @@ function Onclick(e){
 function bigIMG_hide(){
     $("#bigIMG").hide(100);
 }
+window.onclick=Onclick;
 window.onload=function(){
-    window.onclick=Onclick;
 }
