@@ -1,12 +1,15 @@
-window.onload=load('窗框');
-function load(file){
+window.onload=function(){
+  loaddt('厂房平面')
+};
+function loaddt(file){
     var oReq = new XMLHttpRequest();
-    oReq.open("GET", "./dxf/"+file+".json", true);
-    oReq.responseType ="text";
+    oReq.open("GET", "./dxf/"+file+".gz", true);
+    oReq.responseType ="arraybuffer";
     oReq.onload = function (oEvent) {
-      var txt =  oReq.response;
+      var dt=oReq.response;
+      var txt=pako.inflate(dt,{to:'string'})
       dxf= JSON.parse(txt);
-      new WebGL(dxf)
+      new WebGL(dt)
     }
     oReq.send();
 }

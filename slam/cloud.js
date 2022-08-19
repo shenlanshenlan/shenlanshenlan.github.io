@@ -3,24 +3,24 @@ var scene;
 var camera;
 $(window).on("load",function(){
     scene = new THREE.Scene();
-    var width = window.innerWidth; //´°¿Ú¿í¶È
-    var height = window.innerHeight; //´°¿Ú¸ß¶È
-   //´´½¨Ïà»ú¶ÔÏó
+    var width = window.innerWidth; //çª—å£å®½åº¦
+    var height = window.innerHeight; //çª—å£é«˜åº¦
+   //åˆ›å»ºç›¸æœºå¯¹è±¡
    camera = new THREE.PerspectiveCamera(45,width/height, 0.1, 1000);
-   camera.position.set(0, 0, 5.5); //ÉèÖÃÏà»úÎ»ÖÃ
+   camera.position.set(0, 0, 5.5); //è®¾ç½®ç›¸æœºä½ç½®
    camera.near=0.0001;
    camera.far=10000;
    scene.add(camera);
-    //»·¾³¹â
+    //ç¯å¢ƒå…‰
     ambient = new THREE.AmbientLight(0xffffff);
     scene.add(ambient);
    renderer = new THREE.WebGLRenderer();
-   renderer.setSize(width, height);//ÉèÖÃäÖÈ¾ÇøÓò³ß´ç
-   renderer.setClearColor(0xffffff, 1); //ÉèÖÃ±³¾°ÑÕÉ«
-   document.body.appendChild(renderer.domElement); //bodyÔªËØÖĞ²åÈëcanvas¶ÔÏó
+   renderer.setSize(width, height);//è®¾ç½®æ¸²æŸ“åŒºåŸŸå°ºå¯¸
+   renderer.setClearColor(0x888889, 1); //è®¾ç½®èƒŒæ™¯é¢œè‰²
+   document.body.appendChild(renderer.domElement); //bodyå…ƒç´ ä¸­æ’å…¥canvaså¯¹è±¡
    //cube =cube();
    InitControls();
-   //camera.lookAt(cube.position); //ÉèÖÃÏà»ú·½Ïò(Ö¸ÏòµÄ³¡¾°¶ÔÏó)
+   //camera.lookAt(cube.position); //è®¾ç½®ç›¸æœºæ–¹å‘(æŒ‡å‘çš„åœºæ™¯å¯¹è±¡)
    load_Cloud();
 
    render();
@@ -30,10 +30,11 @@ function render(){
 }
 function load_Cloud(){
     var oReq = new XMLHttpRequest();
-    oReq.open("GET", "./cloud.txt", true);
-    oReq.responseType =   "text";
+    oReq.open("GET", "./cloud.gz", true);
+    oReq.responseType ="arraybuffer";
     oReq.onload = function (oEvent) {
-      var txt =  oReq.response;
+      var dt=  oReq.response;
+      var txt=pako.ungzip(dt,{to:'string'})
       var arr =txt.split("\n");
       $("#size").html(arr.length);
       for(i=0;i<arr.length;i++){
@@ -46,9 +47,9 @@ function load_Cloud(){
       //update(i,arr.length);
       }
       var pointMaterial = new THREE.PointsMaterial({
-        color: 0xFFFFFF,    //ÉèÖÃÑÕÉ«£¬Ä¬ÈÏ 0xFFFFFF
-        vertexColors: true, //¶¨Òå²ÄÁÏÊÇ·ñÊ¹ÓÃ¶¥µãÑÕÉ«£¬Ä¬ÈÏfalse ---Èç¹û¸ÃÑ¡ÏîÉèÖÃÎªtrue£¬ÔòcolorÊôĞÔÊ§Ğ§
-        size: 0.005             //¶¨ÒåÁ£×ÓµÄ´óĞ¡¡£Ä¬ÈÏÎª1.0
+        color: 0xFFFFFF,    //è®¾ç½®é¢œè‰²ï¼Œé»˜è®¤ 0xFFFFFF
+        vertexColors: true, //å®šä¹‰ææ–™æ˜¯å¦ä½¿ç”¨é¡¶ç‚¹é¢œè‰²ï¼Œé»˜è®¤false ---å¦‚æœè¯¥é€‰é¡¹è®¾ç½®ä¸ºtrueï¼Œåˆ™colorå±æ€§å¤±æ•ˆ
+        size: 0.015             //å®šä¹‰ç²’å­çš„å¤§å°ã€‚é»˜è®¤ä¸º1.0
       });
       pts =new THREE.Points(geometry,pointMaterial);
       pts.scale.set(2,2,2);
@@ -92,13 +93,13 @@ function cube(){
 }
 var ctr
 function InitControls(){
-   ctr = new THREE.OrbitControls(camera,renderer.domElement);//´´½¨¿Ø¼ş¶ÔÏó
+   ctr = new THREE.OrbitControls(camera,renderer.domElement);//åˆ›å»ºæ§ä»¶å¯¹è±¡
    ctr.zoomSpeed=0.05;
-   //Æ½ÒÆËÙ¶È
+   //å¹³ç§»é€Ÿåº¦
    ctr.panSpeed=0.05;
-   //Ğı×ªËÙ¶È
+   //æ—‹è½¬é€Ÿåº¦
    ctr.rotationSpeed =0.01;
-    //ÊÂ¼ş 
+    //äº‹ä»¶ 
    ctr.addEventListener('change',function(){
     render();
     })
